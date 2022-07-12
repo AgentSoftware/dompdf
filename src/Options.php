@@ -296,6 +296,19 @@ class Options
         $this->setTempDir(sys_get_temp_dir());
         $this->setFontDir($rootDir . "/lib/fonts");
         $this->setFontCache($this->getFontDir());
+
+        $ver = "";
+        $versionFile = realpath(__DIR__ . "/../VERSION");
+        if (file_exists($versionFile) && ($version = trim(file_get_contents($versionFile))) !== false && $version !== '$Format:<%h>$') {
+            $ver = "/$version";
+        }
+        $this->setHttpContext([
+            "http" => [
+                "follow_location" => false,
+                "user_agent" => "Dompdf$ver https://github.com/dompdf/dompdf"
+            ]
+        ]);
+
         $this->setLogOutputFile($this->getTempDir() . "/log.htm");
 
         if (null !== $attributes) {
